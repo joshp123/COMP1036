@@ -1,0 +1,14 @@
+# Eggs.py
+# Calculates number of egg boxes and remainder
+# Author:     J Palmer
+# Created on: 2012-01-22
+# Version:    1.0
+eggs = raw_input('How many eggs are in your basket?: ')
+print eggs
+boxes = eggs/6
+remainder = eggs%6
+print eggs, boxes, remainder
+if isinstance(eggs, int) == 1:
+        print integer
+else:
+        print not integer
