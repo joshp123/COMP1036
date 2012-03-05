@@ -1,6 +1,8 @@
-# Random sum thing but catches non-ints and repeats 10 times (incase you really hate calculators or something idk)
-# does the sum of 2 random numbers
-# Josh Palmer 26/2/2k12 etc
+# mathstest.py
+# Random sum thing but catches non-ints and repeats 10 times and keeps score
+# Author:     J Palmer
+# Created on: 2012-03-05
+# Version:    1.1 , added displaying correct answer
 
 import random
 global c,w
