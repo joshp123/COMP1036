@@ -1,7 +1,8 @@
 # game.py
 # Guessing a random number game thing whatup
-# Josh Palmer 26/2/2k12 etc
-# version 1.1 FIXED A VERY IMPORTANT ERROR IN THE NUMBER OF GUESSES THING!!!!!! also grammar
+# Author:     J Palmer
+# Created on: 2012-03-05
+# Version:    1.2 FIXED A VERY IMPORTANT ERROR IN THE NUMBER OF GUESSES THING!!!!!! also grammar and adding out of range check
 
 import random
 
