@@ -20,7 +20,7 @@ def AskRand():
 		print "You are right!"
 		c +=1
 	else:
-		print "Wrong"
+		print "You're wrong :( The correct answer was: " + repr(sum(numbers))
 		w +=1
 
 for i in xrange(10):
