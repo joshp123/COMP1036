@@ -1,3 +1,9 @@
+# sum.py
+# Asks user to add up 2 random numbers
+# Author:     J Palmer
+# Created on: 2012-03-05
+# Version:    1.1
+
 # Random sum thingy
 # does the sum of 2 random numbers
 # Josh Palmer 26/2/2k12 etc
