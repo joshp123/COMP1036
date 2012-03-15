@@ -6,7 +6,7 @@
 
 import random
 
-def Guess():
+def Guess(n):
 	done = 0
 	guesses = []
 	g_count = 0
@@ -46,12 +46,11 @@ def Guess():
 
 
 def main():
-	global n
 	n = 0
 	while n in [0,25,50,100]:
 		n = random.randint(1,100)
-	print n
-	Guess()
+	# print n // enable for diagnostics
+	Guess(n)
 
 
 if __name__ == "__main__":
