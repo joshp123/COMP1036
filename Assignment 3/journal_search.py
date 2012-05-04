@@ -23,17 +23,17 @@ def build_dataset(filename):
 
 
 def search_prompt():
-	searchstr = raw_input("Search on author (A = ***) or journal/conference (J = ***), where *** is any string [Q = quit]: (don't add extra spaces this will break shit k)")
+	searchstr = raw_input("Search on author (A = ***) or journal/conference (J = ***), where *** is any string [Q = quit]: ")
 	args = string.split(searchstr)
 
-	if args [0] == A:
+	if args [0] == "A":
 		# search authors
-		field = author
+		field = "author"
 
-	elif args [0] == J:
-		field = journal
+	elif args [0] == "J":
+		field = "journal"
 		# search journals
-	elif args [0] == Q:
+	elif args [0] == "Q":
 		print "Program Exiting"
 		return
 	else:
