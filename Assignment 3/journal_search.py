@@ -1,10 +1,12 @@
 # journal_search.py
 # Searches a database of journals and allows searching within them
 # Author:     J Palmer
-# Created on: 2012-03-18
-# Version:    1.0.0 [initial barebones non-funtional version]
+# Created on: 2012-05-04
+# Version:    1.1 [omg it works]
 
-import os, fileinput, csv, string
+# TODO: check erros mofo
+
+import os, fileinput, csv, string, sys
 
 def build_dataset(filename):
     dataset = []
@@ -23,31 +25,34 @@ def build_dataset(filename):
 
 
 def search_prompt():
-	searchstr = raw_input("Search on author (A = ***) or journal/conference (J = ***), where *** is any string [Q = quit]: ")
-	args = string.split(searchstr)
+	valid = 0
+	while valid == 0:
+		searchstr = raw_input("Search on author (A = ***) or journal/conference (J = ***), where *** is any string [Q = quit]:\n")
+		args = string.split(searchstr)
+		if args [0] == "A":
+			# search authors
+			field = "author"
+			valid = 1
+		elif args [0] == "J":
+			field = "journal"
+			# search journals
+			valid = 1
+		elif args [0] == "Q":
+			print "Program Exiting"
+			sys.exit()
+		else:
+			print "Please enter a valid command!"
 
-	if args [0] == "A":
-		# search authors
-		field = "author"
-
-	elif args [0] == "J":
-		field = "journal"
-		# search journals
-	elif args [0] == "Q":
-		print "Program Exiting"
-		return
-	else:
-		print "Please enter a valid command!"
 	# field sorted, now extract query
 
 	query = searchstr[4:len(searchstr)]
 
 	return field, query
 
-def find_in_dataset(dataset, search, fields=['author', 'title']):
+def find_in_dataset(dataset, search, fields=['author', 'journal']):
     retval = []
     for record in dataset:
-        if search in record['title'] or \
+        if search in record['journal'] or \
             _subsearch(search, record['author']):
        			retval.append(record)
     return tuple(retval)
@@ -70,12 +75,48 @@ def file_get_check():
 			print "This doesn't appear to be a valid file. Please try again."
 	return filename
 
+def sanitize(result):
+
+	# loop over everything
+	fullstring = [] # make a list of all sanitized results ready for output, so that main can loop and print em all
+	
+	for x in xrange(0,len(result)):
+		results = result[x] # map results[x] to another variable so i don't have to type results[x]['author'][0] a billion times
+
+		# count authors
+
+		a_count = len(results['author'])
+		if a_count == 1:
+			authors = results['author'][0] + "."
+		else:
+			authors1 = ''
+			for x in xrange(0,a_count-1):
+				authors1 = authors1 + results['author'][x] + ", "
+			authors = authors1 + "& " + results['author'][a_count-1] + "." ##  might need to change this for 2 authors idk
+
+		# stick together the other crap
+
+		fullstring.append(authors + " (" + results['year'] + "). " + results['title'] + ". " + results['journal'] + ".")
+
+	return fullstring
+
+
+
 def main():
 	filename = file_get_check()
 	data = build_dataset(filename)
-	field, query = search_prompt()
-	results = find_in_dataset(data, query, field)
-	print results
+	while True:
+		field, query = search_prompt()
+		results = find_in_dataset(data, query, field)
+		if len(results) == 0:
+			print "\nNo matching papers found\n"
+		else:
+			output = sanitize(results)
+			print '\n'
+			for x in xrange(0,len(output)):
+				print output[x]
+			print "\n"
+	return
 
 
 
