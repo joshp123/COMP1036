@@ -2,26 +2,34 @@
 # Searches a database of journals and allows searching within them
 # Author:     J Palmer
 # Created on: 2012-05-04
-# Version:    1.1 [omg it works]
+# Version:    1.3 [omg it works] // added error checking: ignores header line, and exits on incorrect data; error actually work now
+
 
 # TODO: check erros mofo
 
 import os, fileinput, csv, string, sys
 
 def build_dataset(filename):
-    dataset = []
-    with open(filename, 'rbU') as fd:
-        reader = csv.reader(fd, delimiter="\t")
-        for line in reader:
-            (author, year, title, journal) = line
-            dataset.append({'author': author.split(';'),
-                            'year': year,
-                            'title': title,
-                            'journal': journal})
-    # print dataset
-    # TODO: error handling
-    
-    return tuple(dataset)
+	dataset = []
+	with open(filename, 'rbU') as fd:  ## BLANK FILE ALTERZ
+		reader = csv.reader(fd, delimiter="\t")
+		header_skipped = 0
+		for line in reader:
+			(author, year, title, journal) = line
+			if header_skipped == 0: # don't add fist line of file, header
+				header_skipped = 1
+				continue
+
+			dataset.append({'author': author.split(';'),
+							'year': year,
+							'title': title,
+							'journal': journal})
+			
+			if (journal == '') or (year == '') or (author == '') or (title == ''): # if any values blank, error
+				print "Incorrectly formatted data found. The erroneous line is: \n" + repr(line) + "\nProgram Exiting."
+				sys.exit()
+
+	return tuple(dataset)
 
 
 def search_prompt():
@@ -50,19 +58,19 @@ def search_prompt():
 	return field, query
 
 def find_in_dataset(dataset, search, fields=['author', 'journal']):
-    retval = []
-    for record in dataset:
-        if search in record['journal'] or \
-            _subsearch(search, record['author']):
-       			retval.append(record)
-    return tuple(retval)
+	retval = []
+	for record in dataset:
+		if search in record['journal'] or \
+			_subsearch(search, record['author']):
+				retval.append(record)
+	return tuple(retval)
  
  
 def _subsearch(needle, haystack):
-    for field in haystack:
-        if needle in field:
-            return True
-    return False
+	for field in haystack:
+		if needle in field:
+			return True
+	return False
 
 
 def file_get_check():
