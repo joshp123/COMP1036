@@ -7,9 +7,6 @@
 import os, fileinput, csv, string
 
 def build_dataset(filename):
-    Journals = []
-    Authors = []
-    Title = []
     dataset = []
     with open(filename, 'rbU') as fd:
         reader = csv.reader(fd, delimiter="\t")
@@ -25,8 +22,8 @@ def build_dataset(filename):
     return tuple(dataset)
 
 
-def file_search(data):
-	searchstr = raw_input("Search on author (A = ***) or journal/conference (J = ***), where *** is any string [Q = quit]: ")
+def search_prompt():
+	searchstr = raw_input("Search on author (A = ***) or journal/conference (J = ***), where *** is any string [Q = quit]: (don't add extra spaces this will break shit k)")
 	args = string.split(searchstr)
 
 	if args [0] == A:
@@ -41,10 +38,26 @@ def file_search(data):
 		return
 	else:
 		print "Please enter a valid command!"
-	
-	
+	# field sorted, now extract query
 
-	return
+	query = searchstr[4:len(searchstr)]
+
+	return field, query
+
+def find_in_dataset(dataset, search, fields=['author', 'title']):
+    retval = []
+    for record in dataset:
+        if search in record['title'] or \
+            _subsearch(search, record['author']):
+       			retval.append(record)
+    return tuple(retval)
+ 
+ 
+def _subsearch(needle, haystack):
+    for field in haystack:
+        if needle in field:
+            return True
+    return False
 
 
 def file_get_check():
@@ -60,6 +73,10 @@ def file_get_check():
 def main():
 	filename = file_get_check()
 	data = build_dataset(filename)
+	field, query = search_prompt()
+	results = find_in_dataset(data, query, field)
+	print results
+
 
 
 if __name__ == "__main__":
