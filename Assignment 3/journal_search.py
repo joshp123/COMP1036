@@ -2,19 +2,24 @@
 # Searches a database of journals and allows searching within them
 # Author:     J Palmer
 # Created on: 2012-03-18
-# Version:    1.0
+# Version:    1.0.0 [initial barebones non-funtional version]
 
-import os, fileinput
+import os, fileinput, csv
 
-def ParseFile(filename):
-	filein = open(filename,"r")
-	i = 0
-	lines = []
-	for line in fileinput.input(files=filename):
-		lines.append(line)
-	for i in xrange(0,len(lines)):
-		# operate on lines here
-	return
+def build_dataset(filename):
+    dataset = []
+    with open(filename, 'rbU') as fd:
+        reader = csv.reader(fd, delimiter="\t")
+        for line in reader:
+            (author, year, title, journal) = line
+            dataset.append({'author': author.split(';'),
+                            'year': year,
+                            'title': title,
+                            'journal': journal})
+
+    # TODO: error handling
+    
+    return tuple(dataset)
 
 
 
@@ -30,8 +35,8 @@ def FileGetCheck():
 
 def main():
 	filename = FileGetCheck()
-	ParseFile(filename)
-
+	data = build_dataset(filename)
+# 
 
 if __name__ == "__main__":
 	main()
