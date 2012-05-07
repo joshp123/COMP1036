@@ -2,16 +2,15 @@
 # Searches a database of journals and allows searching within them
 # Author:     J Palmer
 # Created on: 2012-05-04
-# Version:    1.3 [omg it works] // added error checking: ignores header line, and exits on incorrect data; error actually work now
+# Version:    1.3.1 [omg it works] // added error checking: ignores header line, and exits on incorrect data; error actually work now
 
+# TODO: add an error if file blank
 
-# TODO: check erros mofo
-
-import os, fileinput, csv, string, sys
+import os, csv, string, sys
 
 def build_dataset(filename):
 	dataset = []
-	with open(filename, 'rbU') as fd:  ## BLANK FILE ALTERZ
+	with open(filename, 'rbU') as fd:
 		reader = csv.reader(fd, delimiter="\t")
 		header_skipped = 0
 		for line in reader:
@@ -53,7 +52,7 @@ def search_prompt():
 
 	# field sorted, now extract query
 
-	query = searchstr[4:len(searchstr)]
+	query = searchstr[4:len(searchstr)] # turns out you can do searchstr[4:] and that works too. yay python
 
 	return field, query
 
